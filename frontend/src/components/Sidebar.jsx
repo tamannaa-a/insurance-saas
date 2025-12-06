@@ -7,7 +7,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: "policy", label: "Policy Summary" },
     { id: "fraud", label: "Fraud Detection" },
-    { id: "doc", label: "Document Classification" }
+    { id: "doc", label: "Document Intelligence" }
   ];
 
   return (
