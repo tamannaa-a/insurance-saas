@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text
 from sqlalchemy.orm import relationship
-from .database import Base
+
+from database import Base
 
 
 class Tenant(Base):
@@ -23,3 +24,20 @@ class User(Base):
     tenant_id = Column(Integer, ForeignKey("tenants.id"))
 
     tenant = relationship("Tenant", back_populates="users")
+
+
+class Document(Base):
+    """
+    Stores text content of classified documents for semantic similarity
+    (here using a simple Jaccard overlap as a demo).
+    """
+
+    __tablename__ = "documents"
+
+    id = Column(Integer, primary_key=True, index=True)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), index=True)
+    filename = Column(String, nullable=False)
+    doc_type = Column(String, nullable=False)
+    text_content = Column(Text, nullable=False)
+
+    tenant = relationship("Tenant")
