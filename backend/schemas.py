@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 
 # ------------ AUTH / USER ------------
@@ -22,7 +22,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    tenant_name: str  # new tenant or existing tenant
+    tenant_name: str  # new tenant or existing tenant name
 
 
 class UserOut(UserBase):
@@ -67,9 +67,46 @@ class FraudScore(BaseModel):
     reasons: List[str]
 
 
-# ------------ DOCUMENT CLASSIFICATION ------------
+# ------------ DOCUMENT CLASSIFICATION (PREMIUM) ------------
 
-class DocClassResponse(BaseModel):
+class ExtractionField(BaseModel):
+    name: str
+    value: Optional[str] = None
+    confidence: float
+
+
+class FraudSignal(BaseModel):
+    label: str
+    severity: str  # "low", "medium", "high"
+    description: str
+
+
+class SimilarDoc(BaseModel):
+    id: int
+    filename: str
+    doc_type: str
+    similarity: float
+
+
+class PageType(BaseModel):
+    page_number: int
     doc_type: str
     confidence: float
-    keywords_matched: list[str]
+
+
+class DocClassAnalysisResponse(BaseModel):
+    doc_type: str
+    confidence: float
+    keywords_matched: List[str]
+    engine_breakdown: Dict[str, float]  # keyword / semantic / layout / final
+
+    extracted_fields: List[ExtractionField]
+    fraud_signals: List[FraudSignal]
+    tags: List[str]
+
+    quality_score: float  # 0–100
+    similar_docs: List[SimilarDoc]
+    page_map: List[PageType]
+
+    # For frontend text highlighting
+    highlight_phrases: List[str]
