@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
-from ..auth import get_current_user
-from ..database import get_db
-from .. import schemas, models
+from auth import get_current_user
+from database import get_db
+import schemas
+import models
 
 router = APIRouter(prefix="/fraud-detection", tags=["Fraud Detection"])
 
