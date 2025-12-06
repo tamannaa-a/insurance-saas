@@ -44,12 +44,17 @@ const FraudDetection = () => {
 
     try {
       setLoading(true);
-      const res = await api.post("/fraud-detection/score", payload, authHeader(token));
+      const res = await api.post(
+        "/fraud-detection/score",
+        payload,
+        authHeader(token)
+      );
       setResult(res.data);
     } catch (err) {
       console.error(err);
       setError(
-        err?.response?.data?.detail || "Failed to score the claim for fraud risk."
+        err?.response?.data?.detail ||
+          "Failed to score the claim for fraud risk."
       );
     } finally {
       setLoading(false);
