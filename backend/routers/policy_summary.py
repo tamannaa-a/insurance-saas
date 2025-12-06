@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional
 import io
-
 import pdfplumber
 
-from ..auth import get_current_user
-from .. import schemas, models
-from ..database import get_db
+from auth import get_current_user
+from database import get_db
+import schemas
+import models
 
 router = APIRouter(prefix="/policy-summary", tags=["Policy Summary"])
 
@@ -22,7 +22,7 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
 
 
 def simple_summarize(text: str, max_words: int = 200) -> str:
-    # Naive baseline: first N words, could be replaced with LLM later
+    # Naive baseline: first N words
     words = text.split()
     if len(words) <= max_words:
         return text
@@ -47,7 +47,6 @@ async def summarize_policy(
     if file.content_type == "application/pdf" or file.filename.lower().endswith(".pdf"):
         text = extract_text_from_pdf(content)
     else:
-        # Assume text-like
         try:
             text = content.decode("utf-8", errors="ignore")
         except Exception:
