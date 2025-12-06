@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from .. import schemas, models
-from ..database import get_db
-from ..auth import get_password_hash, verify_password, create_access_token, get_current_user
+import schemas
+import models
+from database import get_db
+from auth import get_password_hash, verify_password, create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -15,7 +16,7 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered",
+            detail="Email already registered.",
         )
 
     # Get or create tenant
@@ -27,7 +28,7 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
     if tenant is None:
         tenant = models.Tenant(name=user_in.tenant_name)
         db.add(tenant)
-        db.flush()  # get tenant.id without committing
+        db.flush()  # populate tenant.id
 
     user = models.User(
         email=user_in.email,
