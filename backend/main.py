@@ -1,22 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .database import Base, engine
-from .routers import auth_routes, policy_summary, fraud_detection, doc_classification
+from database import Base, engine
+from routers import auth_routes, policy_summary, fraud_detection, doc_classification
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Insurance SaaS Backend",
-    description="Multi-tenant backend for Policy Summary, Fraud Detection, and Document Classification.",
-    version="0.1.0",
+    description="Multi-tenant backend for Policy Summary, Fraud Detection, and Premium Document Classification.",
+    version="0.2.0",
 )
 
-# CORS (adjust origins later for your frontend)
+# CORS (open for local dev – restrict in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # for dev; change in prod
+    allow_origins=["*"],  # in prod -> set specific domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
