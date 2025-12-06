@@ -1,1 +1,1 @@
-from . import auth_routes, policy_summary, fraud_detection, doc_classification  # noqa
+# Makes `routers` a package. Routers are imported in main.py.
