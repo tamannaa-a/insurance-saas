@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       fetchMe();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchMe = async () => {
