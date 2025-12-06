@@ -40,7 +40,6 @@ const AuthPage = () => {
       if (isLoginMode) {
         await login(form.email, form.password);
       } else {
-        // Register then auto-login
         await api.post("/auth/register", {
           full_name: form.full_name,
           email: form.email,
