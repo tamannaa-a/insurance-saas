@@ -7,16 +7,17 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from .database import get_db
-from . import models, schemas
+from database import get_db
+import models
+import schemas
 
 # === JWT CONFIG ===
-SECRET_KEY = "SUPER_SECRET_CHANGE_ME"  # TODO: change via env var in production
+SECRET_KEY = "SUPER_SECRET_CHANGE_ME"  # change in prod (env var)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")  # used by Swagger
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -50,7 +51,7 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: Optional[int] = payload.get("sub")
+        user_id: Optional[str] = payload.get("sub")
         if user_id is None:
             raise credentials_exception
         token_data = schemas.TokenData(user_id=int(user_id))
