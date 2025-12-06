@@ -5,7 +5,7 @@ import FraudDetection from "./FraudDetection";
 import DocClassification from "./DocClassification";
 
 const DashboardLayout = () => {
-  const [activeTab, setActiveTab] = useState("policy");
+  const [activeTab, setActiveTab] = useState("doc"); // focus on doc by default
 
   const renderContent = () => {
     switch (activeTab) {
@@ -16,7 +16,7 @@ const DashboardLayout = () => {
       case "doc":
         return <DocClassification />;
       default:
-        return <PolicySummary />;
+        return <DocClassification />;
     }
   };
 
